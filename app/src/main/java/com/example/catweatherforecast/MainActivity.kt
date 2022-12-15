@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Catlina")
+                    MyApp()
                 }
             }
         }
@@ -30,14 +30,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun MyApp() {
+    Text(text = "Hello there")
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     CatWeatherForecastTheme {
-        Greeting("Android")
+        MyApp()
     }
 }
