@@ -31,15 +31,19 @@ fun ShowData(mainViewModel: MainViewModel) {
             initialValue = DataOrException(
                 loading = true
             )) {
-                value = mainViewModel.data.value
+                value = mainViewModel.getWeatherData(city = "Seattle")
             }.value
     if (weatherData.loading == true) {
         CircularProgressIndicator()
     } else if (weatherData.data != null) {
 
-
-        Text(text = "Main Screen ${weatherData.data?.city?.country}")
-
+      Surface(modifier = Modifier.fillMaxSize(),color = Color(0xE1FF6538)) {
+          Column(verticalArrangement = Arrangement.Center,
+              horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+              Text(text = "Main Screen ${weatherData.data.toString()}")
+          }
+      }
 
 }}
 
