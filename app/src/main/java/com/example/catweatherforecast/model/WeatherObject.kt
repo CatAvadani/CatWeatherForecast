@@ -3,35 +3,13 @@ package com.example.catweatherforecast.model
 
 import com.google.gson.annotations.SerializedName
 
-data class WeatherObject (
-    @SerializedName("clouds")
-    val clouds: Int? = 0,
-    @SerializedName("deg")
-    val deg: Int? = 0,
-    @SerializedName("dt")
-    val dt: Int? = 0,
-    @SerializedName("feels_like")
-    val feelsLike: FeelsLike? = FeelsLike(),
-    @SerializedName("gust")
-    val gust: Double? = 0.0,
-    @SerializedName("humidity")
-    val humidity: Int? = 0,
-    @SerializedName("pop")
-    val pop: Double? = 0.0,
-    @SerializedName("pressure")
-    val pressure: Int? = 0,
-    @SerializedName("rain")
-    val rain: Double? = 0.0,
-    @SerializedName("snow")
-    val snow: Double? = 0.0,
-    @SerializedName("speed")
-    val speed: Double? = 0.0,
-    @SerializedName("sunrise")
-    val sunrise: Int? = 0,
-    @SerializedName("sunset")
-    val sunset: Int? = 0,
-    @SerializedName("temp")
-    val temp: Temp? = Temp(),
-    @SerializedName("weather")
-    val weather: List<WeatherX>? = listOf()
+data class WeatherObject(
+    @SerializedName("description")
+    val description: String? = "",
+    @SerializedName("icon")
+    val icon: String? = "",
+    @SerializedName("id")
+    val id: Int? = 0,
+    @SerializedName("main")
+    val main: String? = ""
 )
