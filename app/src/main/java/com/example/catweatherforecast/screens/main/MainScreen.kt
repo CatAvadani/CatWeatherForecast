@@ -9,16 +9,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -29,6 +34,7 @@ import com.example.catweatherforecast.model.WeatherItem
 import com.example.catweatherforecast.screens.main.MainViewModel
 import com.example.catweatherforecast.utils.formatDate
 import com.example.catweatherforecast.utils.formatDateTime
+import com.example.catweatherforecast.utils.formatDay
 import com.example.catweatherforecast.utils.formatDecimals
 import com.example.catweatherforecast.widgets.WeatherAppBar
 
@@ -39,7 +45,7 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hilt
             initialValue = DataOrException(
                 loading = true
             )) {
-            value = mainViewModel.getWeatherData(city = "Bucharest")
+            value = mainViewModel.getWeatherData(city = "Gothenburg")
         }.value
     if (weatherData.loading == true) {
         CircularProgressIndicator()
@@ -84,7 +90,7 @@ fun MainContent(data: Weather) {
             text = formatDate(weatherItem?.dt.toString().toInt()),
             style = MaterialTheme.typography.caption,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colors.onSecondary,
+            color = Color.Black,
             modifier = Modifier.padding(6.dp)
         )
         Surface(
@@ -99,8 +105,15 @@ fun MainContent(data: Weather) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 WeatherStateImage(imageUrl = imageUrl)
-                Text(text = formatDecimals(weatherItem?.temp?.day.toString().toDouble()) + "\u00B0", style = MaterialTheme.typography.h4, fontWeight = FontWeight.ExtraBold)
-                Text(text = weatherItem?.weather?.get(0)?.main.toString(), fontStyle = FontStyle.Italic)
+                Text(text = formatDecimals(weatherItem?.temp?.day.toString().toDouble()) + "\u00B0",
+                    style = MaterialTheme.typography.h4,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.Black
+                )
+                Text(text = weatherItem?.weather?.get(0)?.main.toString(),
+                    fontStyle = FontStyle.Italic,
+                    color = Color.Black
+                )
             }
         }
         HumidityWindPressureRow(weather = data.list?.get(0))
@@ -111,10 +124,20 @@ fun MainContent(data: Weather) {
             style = MaterialTheme.typography.subtitle1,
             fontWeight = FontWeight.Bold,
             color = Color.Black)
-        LazyColumn{
-            items(items = data.list!!) { item: WeatherItem ->  
-                RowOfWeekDays()
-                //Text(text = item.temp?.max.toString(), color = Color.Black)
+
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.LightGray,
+            shape = RoundedCornerShape(topStartPercent = 10, topEndPercent = 10)
+            
+        ) {
+            LazyColumn(
+                modifier = Modifier.padding(2.dp),
+                contentPadding = PaddingValues(1.dp)
+            ) {
+                items(items = data.list!!) { item: WeatherItem ->
+                    RowOfWeekDays(item)
+                }
             }
         }
 
@@ -123,17 +146,77 @@ fun MainContent(data: Weather) {
 }
 
 @Composable
-fun RowOfWeekDays() {
-  Surface(
-      modifier = Modifier.fillMaxWidth(),
-      shape = RoundedCornerShape(topStartPercent = 50),
-      color = Color(0xFFFCB33C)
-  ) {
-      Row() {
-          Text(text = "today")
-      }
+fun RowOfWeekDays(weather: WeatherItem?) {
+    val imageUrl = "https://openweathermap.org/img/wn/${weather?.weather?.get(0)?.icon}.png"
+
+    Surface(
+        modifier = Modifier
+            .padding(2.dp)
+            .fillMaxWidth()
+            .height(70.dp)
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = 50,
+                    bottomStartPercent = 50,
+                    bottomEndPercent = 50
+                )
+            ),
+        color = Color.White,
+        elevation = 4.dp
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            ) {
+                Text(
+                    text = (formatDate(weather?.dt.toString().toInt())).split(",")[0],
+                    modifier = Modifier.padding(5.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    color = Color.Black
+                )
+                WeatherStateImage(imageUrl = imageUrl)
+                Surface(
+                    modifier = Modifier.wrapContentWidth(),
+                    color = Color(0xB7F1B80C),
+                    shape = CircleShape
+                    
+                ) {
+                    Text(text = weather?.weather?.get(0)?.description.toString(),
+                        color = Color.Black,
+                        style = MaterialTheme.typography.caption,
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(3.dp)
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = weather?.temp?.max?.toInt().toString() + "°",
+                        fontWeight = FontWeight.Bold, color = Color.Blue,
+                    )
+                    Spacer(modifier =Modifier.size(3.dp))
+                    Text(
+                        text = weather?.temp?.min?.toInt().toString() + "°",
+                        fontWeight = FontWeight.Bold, color = Color.LightGray)
+                }
+
+            }
+
+        }
+    }
+
   }
-}
+
 
 @Composable
 fun SunsetSunriseRow(weather: WeatherItem?) {
