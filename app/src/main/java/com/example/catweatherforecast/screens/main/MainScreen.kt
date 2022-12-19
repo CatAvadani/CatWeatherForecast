@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
@@ -12,14 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.catweatherforecast.R
 import com.example.catweatherforecast.data.DataOrException
@@ -27,6 +28,7 @@ import com.example.catweatherforecast.model.Weather
 import com.example.catweatherforecast.model.WeatherItem
 import com.example.catweatherforecast.screens.main.MainViewModel
 import com.example.catweatherforecast.utils.formatDate
+import com.example.catweatherforecast.utils.formatDateTime
 import com.example.catweatherforecast.utils.formatDecimals
 import com.example.catweatherforecast.widgets.WeatherAppBar
 
@@ -101,8 +103,85 @@ fun MainContent(data: Weather) {
                 Text(text = weatherItem?.weather?.get(0)?.main.toString(), fontStyle = FontStyle.Italic)
             }
         }
-        HumidityWindPressureRow(weather = weatherItem)
+        HumidityWindPressureRow(weather = data.list?.get(0))
+        Divider(color = Color.Black)
+        SunsetSunriseRow(weather = data.list?.get(0))
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(text = "This Week",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black)
+        LazyColumn{
+            items(items = data.list!!) { item: WeatherItem ->  
+                RowOfWeekDays()
+                //Text(text = item.temp?.max.toString(), color = Color.Black)
+            }
+        }
+
+
     }
+}
+
+@Composable
+fun RowOfWeekDays() {
+  Surface(
+      modifier = Modifier.fillMaxWidth(),
+      shape = RoundedCornerShape(topStartPercent = 50),
+      color = Color(0xFFFCB33C)
+  ) {
+      Row() {
+          Text(text = "today")
+      }
+  }
+}
+
+@Composable
+fun SunsetSunriseRow(weather: WeatherItem?) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 15.dp, bottom = 6.dp)
+    ) {
+        Row(modifier = Modifier.padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.sunrise),
+                contentDescription = "sunrise icon",
+                modifier = Modifier.size(30.dp),
+                tint = Color.Black
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(
+                text = formatDateTime(weather?.sunrise.toString().toInt()),
+                style = MaterialTheme.typography.caption,
+                color = Color.Black
+            )
+
+        }
+        Row(modifier = Modifier.padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = formatDateTime(weather?.sunset.toString().toInt()),
+                style = MaterialTheme.typography.caption,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.sunset),
+                contentDescription = "sunset icon",
+                modifier = Modifier.size(30.dp),
+                tint = Color.Black
+            )
+
+        }
+    }
+
 }
 
 @Composable
@@ -176,10 +255,20 @@ fun WeatherStateImage(imageUrl: String) {
     )
 
 }
+@Preview(showBackground = true)
+@Composable
+fun MainContentPreview(){
+    MainContent(data = Weather())
+}
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
 
     HumidityWindPressureRow(weather = WeatherItem())
+}
+@Preview(showBackground = true)
+@Composable
+fun SunrisePreview() {
+   SunsetSunriseRow(weather = WeatherItem())
 }
