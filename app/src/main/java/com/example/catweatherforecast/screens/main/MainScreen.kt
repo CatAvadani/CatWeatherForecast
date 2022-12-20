@@ -9,15 +9,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,10 +28,10 @@ import com.example.catweatherforecast.R
 import com.example.catweatherforecast.data.DataOrException
 import com.example.catweatherforecast.model.Weather
 import com.example.catweatherforecast.model.WeatherItem
+import com.example.catweatherforecast.navigation.WeatherScreens
 import com.example.catweatherforecast.screens.main.MainViewModel
 import com.example.catweatherforecast.utils.formatDate
 import com.example.catweatherforecast.utils.formatDateTime
-import com.example.catweatherforecast.utils.formatDay
 import com.example.catweatherforecast.utils.formatDecimals
 import com.example.catweatherforecast.widgets.WeatherAppBar
 
@@ -66,6 +63,9 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hilt
 fun MainScaffold(weather: Weather, navController: NavController) {
     Scaffold(topBar = {
         WeatherAppBar(title = weather.city?.name.toString() +", ${weather.city?.country}",
+            onAddActionClicked = {
+                navController.navigate(WeatherScreens.SearchScreen.name)
+            } ,
             navController = navController, elevation = 5.dp) {
             Log.d("Tag", "MainScaffold: Button Clicked")
         }
