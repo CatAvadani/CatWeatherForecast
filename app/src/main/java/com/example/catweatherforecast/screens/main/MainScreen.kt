@@ -36,13 +36,18 @@ import com.example.catweatherforecast.utils.formatDecimals
 import com.example.catweatherforecast.widgets.WeatherAppBar
 
 @Composable
-fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()) {
-    val weatherData =
-        produceState<DataOrException<Weather, Boolean, Exception>>(
+fun MainScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
+) {
+    Log.d("City", "MainScreen: $city")
+
+    val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
             initialValue = DataOrException(
                 loading = true
             )) {
-            value = mainViewModel.getWeatherData(city = "Gothenburg")
+            value = mainViewModel.getWeatherData(city = city.toString())
         }.value
     if (weatherData.loading == true) {
         CircularProgressIndicator()

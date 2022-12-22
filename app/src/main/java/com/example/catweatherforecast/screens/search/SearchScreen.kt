@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.catweatherforecast.navigation.WeatherScreens
 import com.example.catweatherforecast.widgets.WeatherAppBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -58,8 +59,9 @@ fun SearchScreen(navController: NavController) {
               SearchBar(modifier = Modifier
                   .fillMaxWidth()
                   .padding(16.dp)
-                  .align(Alignment.CenterHorizontally)){
-                  Log.d("TAG", "Search Screen: $it")
+                  .align(Alignment.CenterHorizontally)){ mCity ->
+                  //Log.d("TAG", "Search Screen: $it")
+                  navController.navigate(WeatherScreens.MainScreen.name + "/$mCity")
               }
           }
       }
