@@ -23,9 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.catweatherforecast.R
 import com.example.catweatherforecast.data.DataOrException
+import com.example.catweatherforecast.model.City
 import com.example.catweatherforecast.model.Weather
 import com.example.catweatherforecast.model.WeatherItem
 import com.example.catweatherforecast.navigation.WeatherScreens
@@ -346,7 +348,7 @@ fun WeatherStateImage(imageUrl: String) {
 @Preview(showBackground = true)
 @Composable
 fun MainContentPreview(){
-    MainContent(data = Weather())
+    MainScaffold(weather = Weather(), navController = rememberNavController() )
 }
 
 @Preview(showBackground = true)
