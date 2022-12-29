@@ -27,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.catweatherforecast.R
 import com.example.catweatherforecast.data.DataOrException
-import com.example.catweatherforecast.model.City
 import com.example.catweatherforecast.model.Weather
 import com.example.catweatherforecast.model.WeatherItem
 import com.example.catweatherforecast.navigation.WeatherScreens
