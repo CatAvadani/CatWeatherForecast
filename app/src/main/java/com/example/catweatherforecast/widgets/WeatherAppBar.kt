@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.catweatherforecast.model.Favorite
 import com.example.catweatherforecast.navigation.WeatherScreens
 import com.example.catweatherforecast.screens.favorite.FavoriteViewModel
 
@@ -90,8 +91,16 @@ fun WeatherAppBar(
                     contentDescription = "Favorite icon",
                     modifier = Modifier
                         .scale(0.9f)
-                        .clickable {  },
-                    tint = Color.Red
+                        .clickable {
+                            val dataList = title.split(",")
+                            favoriteViewModel.insertFavorite(
+                                Favorite(
+                                    city = dataList[0], // city name
+                                    country = dataList[1] // country code
+
+                                ))
+                        },
+                    tint = Color.Red.copy(0.6f)
                 )
             }
         },
