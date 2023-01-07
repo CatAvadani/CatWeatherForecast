@@ -42,7 +42,7 @@ fun MainScreen(
     mainViewModel: MainViewModel = hiltViewModel(),
     city: String?
 ) {
-    Log.d("City", "MainScreen: $city")
+  //  Log.d("City", "MainScreen: $city")
 
     val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
             initialValue = DataOrException(
