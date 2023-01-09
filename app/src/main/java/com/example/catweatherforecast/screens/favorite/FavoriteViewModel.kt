@@ -21,6 +21,7 @@ class FavoriteViewModel @Inject constructor(private val repository: WeatherDBRep
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+
             repository.getFavorite().distinctUntilChanged()
                 .collect { listOfFavorite ->
                     if (listOfFavorite.isEmpty()) {
